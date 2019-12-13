@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TestMessageApp</string>
+    <string name="action_read">Li ho letti</string>
+
+    <string name="messages_message_date_time">%1$s, %2$s</string>
+    <string name="messages_message_priority">Priorità: %1$s</string>
+
+</resources>

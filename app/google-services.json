@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "292305255603",
+    "firebase_url": "https://wetaxi-test.firebaseio.com",
+    "project_id": "wetaxi-test",
+    "storage_bucket": "wetaxi-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292305255603:android:6746186164c6be33",
+        "android_client_info": {
+          "package_name": "it.wetaxi.test.message"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "292305255603-20etvvaph7lplbjia64tamj8v5r6b6st.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.wetaxi.test.message",
+            "certificate_hash": "3ed45441bee1b7b998de08ad1dd95d4225ce2873"
+          }
+        },
+        {
+          "client_id": "292305255603-1tfhae756b77snohjbqbnnupn4esfn6o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6MZe3cNvjRNhRN_Y5EnvAyQ1cIE1F4UI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "292305255603-1tfhae756b77snohjbqbnnupn4esfn6o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <ImageView
+            android:id="@+id/img_envelope"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            tools:src="@drawable/ic_unread_24px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+            android:id="@+id/txt_date_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/img_envelope"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="01/01/2000, 12:21" />
+
+    <TextView
+            android:id="@+id/txt_priority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_date_time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/txt_date_time"
+            app:layout_constraintTop_toTopOf="@+id/txt_date_time"
+            tools:text="Priorità: 5" />
+
+    <TextView
+            android:id="@+id/txt_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/txt_date_time"
+            app:layout_constraintTop_toBottomOf="@+id/txt_date_time"
+            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nec neque nec neque sollicitudin dignissim sed quis odio. Vestibulum lobortis quam turpis, at euismod elit ultrices eu. Ut a diam vitae neque malesuada placerat. Sed vel massa pretium lectus interdum vulputate eu non lacus." />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
