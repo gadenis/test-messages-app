@@ -26,13 +26,15 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : WeFirebaseMessagingService.MessageNotificationHandler,  AppCompatActivity() {
     val TAG = "MainActivity";
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        sortMessages()
 
         recycler_messages.layoutManager = LinearLayoutManager(this)
         recycler_messages.adapter = MessageAdapter(messages, this)
@@ -71,8 +73,7 @@ class MainActivity : AppCompatActivity() {
                     response.body()?.let {validResponse ->
                         validResponse.message?.let {validMessage ->
                             messages.add(Message(validMessage))
-                            messages.sortBy { it.priority }
-                            messages.sortBy { it.read }
+                            sortMessages()
                             lifecycleScope.launch(Dispatchers.Main) {
                                 recycler_messages.adapter?.notifyDataSetChanged()
                             }
@@ -102,8 +103,7 @@ class MainActivity : AppCompatActivity() {
                 for (message in messages) {
                     message.read = true
                 }
-                messages.sortBy { it.priority }
-                messages.sortBy { it.read }
+                sortMessages()
                 recycler_messages.adapter?.notifyDataSetChanged()
                 return true
             }
@@ -138,6 +138,28 @@ class MainActivity : AppCompatActivity() {
         val messageText = view.txt_message
     }
 
+    override fun onNewNotification(message: Message) {
+        messages.add(message)
+        sortMessages()
+        lifecycleScope.launch(Dispatchers.Main) {
+            recycler_messages.adapter?.notifyDataSetChanged()
+        }
+    }
+
+    private fun sortMessages(){
+        messages.sortBy { it.priority }
+        messages.sortBy { it.read }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        WeFirebaseMessagingService.messageHandler = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        WeFirebaseMessagingService.messageHandler = this
+    }
 
     companion object {
         val messages : MutableList<Message> = ArrayList()

@@ -5,4 +5,7 @@
     <string name="messages_message_date_time">%1$s, %2$s</string>
     <string name="messages_message_priority">Priorità: %1$s</string>
 
+    <string name="message_notification_channel_name">Nuovo Messaggio</string>
+    <string name="message_notification_channel_description">Ci sono nuovi messaggi</string>
+
 </resources>
