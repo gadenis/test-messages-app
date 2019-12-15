@@ -18,8 +18,10 @@ import it.wetaxi.test.message.models.Message
 import it.wetaxi.test.message.network.RetrofitClient
 import it.wetaxi.test.message.network.objects.MessageResponse
 import it.wetaxi.test.message.network.services.Messages
+import it.wetaxi.test.message.persistance.MyPersistance
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.message_item.view.*
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,8 +44,20 @@ class MainActivity : WeFirebaseMessagingService.MessageNotificationHandler,  App
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Chiama API per avere un nuovo messaggio", Snackbar.LENGTH_LONG).show()
             lifecycleScope.launch(Dispatchers.IO) {
-                getMessage()
+                requestNewMessage()
             }
+        }
+
+        lifecycleScope.async(Dispatchers.IO) {
+            val messagesFromDB = MyPersistance.getInstance(applicationContext)?.messageDao()?.getMessages()?.toMutableList()
+            messagesFromDB?.let {
+                messages = it
+                lifecycleScope.async(Dispatchers.Main) {
+                    recycler_messages.layoutManager = LinearLayoutManager(applicationContext)
+                    recycler_messages.adapter = MessageAdapter(messages, applicationContext)
+                }
+            }
+
         }
 
         FirebaseInstanceId.getInstance().instanceId
@@ -59,7 +73,7 @@ class MainActivity : WeFirebaseMessagingService.MessageNotificationHandler,  App
             })
     }
 
-    private suspend fun getMessage(){
+    private suspend fun requestNewMessage(){
         val messageService = RetrofitClient.buildRetrofitClient(this).create(Messages::class.java)
         messageService.getMessages().enqueue(object : Callback<MessageResponse>{
             override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
@@ -161,8 +175,18 @@ class MainActivity : WeFirebaseMessagingService.MessageNotificationHandler,  App
         WeFirebaseMessagingService.messageHandler = this
     }
 
+    override fun onStop() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val messageDao = MyPersistance.getInstance(applicationContext)?.messageDao()
+            for (message in messages) {
+                messageDao?.insertMessage(message)
+            }
+        }
+        super.onStop()
+    }
+
     companion object {
-        val messages : MutableList<Message> = ArrayList()
+        var messages : MutableList<Message> = ArrayList()
     }
 
 }

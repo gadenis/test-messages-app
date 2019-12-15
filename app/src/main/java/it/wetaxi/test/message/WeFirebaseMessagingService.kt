@@ -24,6 +24,7 @@ class WeFirebaseMessagingService : FirebaseMessagingService() {
 
             val message = Message(false)
             val maps = remoteMessage.data
+            //TODO find a better way to parse message from notification
             message.title = maps["title"]
             message.text = maps["text"]
             message.date = maps["date"]
@@ -34,19 +35,14 @@ class WeFirebaseMessagingService : FirebaseMessagingService() {
                 messageHandler?.onNewNotification(message)
             }else{
 
-
-                Log.d(TAG, "Messages size:" + MainActivity.messages.size)
-                Log.d(TAG, "Add new message : " + message.toString())
                 MainActivity.messages.add(message)
-                Log.d(TAG, "New size:" + MainActivity.messages.size)
-
 
                 if (!messageNotificationChanneBuilt) {
                     createNotificationChannel()
                 }
 
                 val intent = Intent(this, MainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
                 }
                 val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
