@@ -36,8 +36,6 @@ class MainActivity : WeFirebaseMessagingService.MessageNotificationHandler,  App
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        sortMessages()
-
         recycler_messages.layoutManager = LinearLayoutManager(this)
         recycler_messages.adapter = MessageAdapter(messages, this)
 
@@ -46,18 +44,6 @@ class MainActivity : WeFirebaseMessagingService.MessageNotificationHandler,  App
             lifecycleScope.launch(Dispatchers.IO) {
                 requestNewMessage()
             }
-        }
-
-        lifecycleScope.async(Dispatchers.IO) {
-            val messagesFromDB = MyPersistance.getInstance(applicationContext)?.messageDao()?.getMessages()?.toMutableList()
-            messagesFromDB?.let {
-                messages = it
-                lifecycleScope.async(Dispatchers.Main) {
-                    recycler_messages.layoutManager = LinearLayoutManager(applicationContext)
-                    recycler_messages.adapter = MessageAdapter(messages, applicationContext)
-                }
-            }
-
         }
 
         FirebaseInstanceId.getInstance().instanceId
@@ -173,14 +159,30 @@ class MainActivity : WeFirebaseMessagingService.MessageNotificationHandler,  App
     override fun onResume() {
         super.onResume()
         WeFirebaseMessagingService.messageHandler = this
+
+        lifecycleScope.async(Dispatchers.IO) {
+            val messagesFromDB = MyPersistance.getInstance(applicationContext)?.messageDao()?.getMessages()?.toMutableList()
+            messagesFromDB?.let {
+                messages = it
+                sortMessages()
+                lifecycleScope.async(Dispatchers.Main) {
+                    recycler_messages.layoutManager = LinearLayoutManager(applicationContext)
+                    recycler_messages.adapter = MessageAdapter(messages, applicationContext)
+                }
+            }
+        }
     }
 
     override fun onStop() {
         lifecycleScope.launch(Dispatchers.IO) {
             val messageDao = MyPersistance.getInstance(applicationContext)?.messageDao()
-            for (message in messages) {
-                messageDao?.insertMessage(message)
+            messageDao?.let {
+                it.clearTable()
+                for (message in messages) {
+                    it.insertMessage(message)
+                }
             }
+
         }
         super.onStop()
     }

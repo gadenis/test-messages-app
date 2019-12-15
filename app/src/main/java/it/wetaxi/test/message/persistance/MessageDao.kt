@@ -14,4 +14,7 @@ interface MessageDao {
     @Query("SELECT * FROM messages")
     fun getMessages() : List<Message>
 
+    @Query("DELETE FROM messages")
+    fun clearTable()
+
 }

@@ -12,6 +12,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import it.wetaxi.test.message.models.Message
+import it.wetaxi.test.message.persistance.MyPersistance
 
 class WeFirebaseMessagingService : FirebaseMessagingService() {
     val TAG = "WeFirebaseMessaging"
@@ -35,7 +36,7 @@ class WeFirebaseMessagingService : FirebaseMessagingService() {
                 messageHandler?.onNewNotification(message)
             }else{
 
-                MainActivity.messages.add(message)
+                MyPersistance.getInstance(applicationContext)?.messageDao()?.insertMessage(message)
 
                 if (!messageNotificationChanneBuilt) {
                     createNotificationChannel()
